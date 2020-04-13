@@ -57,7 +57,9 @@ def comp_fitx(primer,segon):
 def init():
   global fout
   global foutimatges
+  global foutrepassarimatges
   global nom_article
   fout = codecs.open('coses_a_revisar','a',encoding='utf-8')
   foutimatges = codecs.open('imatges_a_revisar','a',encoding='utf-8')
+  foutrepassarimatges = codecs.open('articles_amb_imatge','a',encoding='utf-8')
   nom_article = ""

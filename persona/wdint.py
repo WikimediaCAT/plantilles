@@ -30,18 +30,10 @@ class WDint:
           return None
 
        if p in self.item.claims:    # si hi ha la propietat a wikidata
-           print("Tenim la propietat")
            clm_dict = self.item.claims
            clm_estat = clm_dict[p]    # això és tot el paquet de valors
-           print(clm_estat)
            for elt in clm_estat:
-               print("entrem al bucle")
                val = elt.getTarget()
-               print(val)
-               if val is None:
-                   print("retornem un None")
-               if val is not None:
-                   print("val és diferent de None")
                return val
        else:
            return None
@@ -157,9 +149,10 @@ class WDint:
        except pywikibot.NoPage:
            print(("Article ",article," sense wikidata"))
            return
-       print("getting")
+       # Aquí s'encalla molt quan wikidata va lent
+       #print("getting")
        self.item_dict = self.item.get()
-       print("got it")
+       #print("got it")
        return self.item
 
     def __str__(self):

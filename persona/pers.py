@@ -90,7 +90,7 @@ def main():
    if txtorig != txtnou:
      try:
         pywikibot.showDiff(txtorig,txtnou)
-        comentari = "Robot normalitza infotaula de persona"
+        comentari = "Robot normalitza infotaula persona"
 
 	# per treballar amb fitxer de proves, comentar a partir d'aquí
         if preguntem :

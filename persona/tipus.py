@@ -639,51 +639,59 @@ class Plantilla:
     def tractar_wikidata(self,nom_article):
         # si el nom és el mateix de l'article, el podem eliminar
         if self.get_par("nom") == nom_article:
-            print("********** ELIMINANT EL NOM **********************")
+            #print("********** ELIMINANT EL NOM **********************")
             self.elim_param("nom")
 
         # només si hi ha alguns paràmetres anirem a buscar wikidata
 
-        wditem = varglobals.sel_itemwd(nom_article)
+        par_item   = self.get_par("item")
+        par_imatge = self.get_par("imatge")
+        par_peu    = self.get_par("peu")
+        par_datnai = self.get_par("data_naixement")
+        par_llocna = self.get_par("lloc_naixement")
+        par_datdef = self.get_par("data_defuncio")
+        par_llocde = self.get_par("lloc_defuncio")
+
+        if par_imatge != "" or par_peu    != "" or par_datnai != "" or \
+           par_llocna != "" or par_datdef != "" or par_llocde != "" or \
+           par_item   != "":
+
+           wditem = varglobals.sel_itemwd(nom_article)
 
         # si hi ha paràmetre item i és el mateix de l'article, el podem treure
-        qart = self.get_par("item")
-        if qart != "":
+        if par_item != "":
             laq = wditem.get_id()
             if laq == qart:
                 self.elim_param("item")
 
         # tractament de la imatge i el peu
-        if self.get_par("imatge") != "" or self.get_par("peu") != "":
-            print("********** IMATGE O PEU **********************")
-            self.mirar_imatge(nom_article,wditem)
+        if par_imatge != "" or par_peu != "":
+            #print("********** IMATGE O PEU **********************")
+            # de moment no fem res, a espera de permís
+            #self.mirar_imatge(nom_article,wditem)
+            varglobals.foutrepassarimatges.write(nom_article)
+            varglobals.foutrepassarimatges.write("\n")
 
-        if self.get_par("data_naixement") != "":
-            print("********** DATA DE NAIXEMENT **********************")
+        if par_datnai != "":
+            #print("********** DATA DE NAIXEMENT **********************")
             valor = wditem.llegir_p_wd("P569")
-            print(valor)
-            print(type(valor))
             if valor is not None:
-                print("Eliminem data de naixement")
                 self.elim_param("data_naixement")
-            else:
-                print("No eliminem data de naixement")
 
-        if self.get_par("lloc_naixement") != "":
-            print("********** LLOC DE NAIXEMENT **********************")
+        if par_llocna != "":
+            #print("********** LLOC DE NAIXEMENT **********************")
             valor = wditem.llegir_p_wd("P19")
-            print(valor)
             if valor is not None:
                 self.elim_param("lloc_naixement")
 
-        if self.get_par("data_defuncio") != "":
-            print("********** DATA DE DEFUNCIO **********************")
+        if par_datdef != "":
+            #print("********** DATA DE DEFUNCIO **********************")
             valor = wditem.llegir_p_wd("P570")
             if valor is not None:
                 self.elim_param("data_defuncio")
 
-        if self.get_par("lloc_defuncio") != "":
-            print("********** LLOC DE DEFUNCIO **********************")
+        if par_llocde != "":
+            #print("********** LLOC DE DEFUNCIO **********************")
             valor = wditem.llegir_p_wd("P20")
             if valor is not None:
                 self.elim_param("lloc_defuncio")
