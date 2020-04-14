@@ -10,6 +10,15 @@ from collections import namedtuple
 import pprint
 
 
+def extreu_url(text):
+    # si és del tipus [http://blablabla ... ho volem tot fins al primer espai
+    # traient el claudàtor del davant si hi és
+    mo = re.match(r'\[?(\S*)',text)
+    try:
+        return mo.group(1)
+    except:
+        return ""
+    
 def hiharef(text):
     mo = re.search(
         r"<[Rr][Ee][Ff]\s*[Nn][Aa][Mm][Ee](.*?)<\/[Rr][Ee][Ff]>",
@@ -509,7 +518,9 @@ class Text_art:
         while self.text[cursor].isspace() and self.text[cursor]!='\n':
             cursor += 1
         # si hem sortit perquè no hi ha espai en blanc, inserim salt de línia
-        if self.text[cursor]!='\n':
+        # no ho fem si no havíem trobat cap plantilla, perquè llavors no volem
+        # tocar res
+        if self.text[cursor]!='\n' and len(ordenades)>0:
            toret = toret + '\n'
         # agafem la resta del text
         toret = toret + self.text[cursor:]
@@ -651,10 +662,12 @@ class Plantilla:
         par_llocna = self.get_par("lloc_naixement")
         par_datdef = self.get_par("data_defuncio")
         par_llocde = self.get_par("lloc_defuncio")
+        par_signat = self.get_par("signatura")
+        par_web    = self.get_par("lloc_web")
 
         if par_imatge != "" or par_peu    != "" or par_datnai != "" or \
            par_llocna != "" or par_datdef != "" or par_llocde != "" or \
-           par_item   != "":
+           par_item   != "" or par_signat != "" or par_web != "":
 
            wditem = varglobals.sel_itemwd(nom_article)
 
@@ -671,6 +684,23 @@ class Plantilla:
             #self.mirar_imatge(nom_article,wditem)
             varglobals.foutrepassarimatges.write(nom_article)
             varglobals.foutrepassarimatges.write("\n")
+
+        if par_web != "":
+            #print("********** WEB **********************")
+            valor = wditem.llegir_p_wd("P856")
+            par_web = extreu_url(par_web)
+            if valor is not None:
+               valor   = valor.rstrip('/]_')       # possibles caràcters estranys que no volem
+               par_web = par_web.rstrip('/]_')     # tenir en compte en la comparació
+
+            if valor == par_web:
+                self.elim_param("lloc_web")
+
+        if par_signat != "":
+            #print("********** SIGNATURA **********************")
+            valor = wditem.llegir_p_wd("P109")
+            if valor is not None:
+                self.elim_param("signatura")
 
         if par_datnai != "":
             #print("********** DATA DE NAIXEMENT **********************")
