@@ -25,7 +25,7 @@ class WDint:
        if self.item == None:
            print("******* Error, item no seleccionat *********")
            return
-       print("Mirem propietat %s" % p)
+       #print("Mirem propietat %s" % p)
        if p=="":
           return None
 
