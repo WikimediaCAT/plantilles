@@ -61,7 +61,7 @@ class WDint:
        if self.item == None:
            print("Error, item no seleccionat")
            return
-       print("********** ATENCIO Posant imatge a Wikidata **************************")
+       print("Posant imatge a Wikidata")
        nouclm = pywikibot.Claim(self.repowd,'P18')
        nouclm.setTarget(fitxer)
        importatde = pywikibot.Claim(self.repowd,'P143')
@@ -73,7 +73,16 @@ class WDint:
        if peu.strip()!="":
          qualif = pywikibot.Claim(self.repowd,'P2096')
          qualif.setTarget(pywikibot.WbMonolingualText(text=peu,language='ca'))
-         nouclm.addQualifier(qualif)
+         minuts = 1
+         # Wikidata dóna molts timeouts, hem de posar més controls
+         while True:
+           try:
+              nouclm.addQualifier(qualif)
+              break
+           except pywikibot.exceptions.MaxlagTimeoutError:
+              time.sleep(minuts*120)
+              minuts = minuts + 1
+              nouclm.addQualifier(qualif)
 
     # actualitza el peu d'imatge en català d'una imatge donada a Wikidata
     def act_wd_peu(self,fitxer,peu,propietat):
@@ -94,7 +103,7 @@ class WDint:
                nom_fitxer = tg.title(with_ns=False)
                if varglobals.comp_fitx(nom_fitxer,fitxer):    # aquest és el fitxer on hem de
                                            # posar el peu de foto
-                  print("********** ATENCIO Posant peu d'imatge a Wikidata **************************")
+                  print("Posant peu d'imatge a Wikidata")
                   qualif = pywikibot.Claim(self.repowd,'P2096')
                   qualif.setTarget(pywikibot.WbMonolingualText(text=peu,language='ca'))
                   clm.addQualifier(qualif)
@@ -144,15 +153,23 @@ class WDint:
         return self.item.getID()
 
     def wd_q_des_de_pag(self,pagina):
+       minuts = 1
        try:
            self.item = pywikibot.ItemPage.fromPage(pagina,self.wdsite)
        except pywikibot.NoPage:
            print(("Article ",article," sense wikidata"))
            return
-       # Aquí s'encalla molt quan wikidata va lent
-       #print("getting")
-       self.item_dict = self.item.get()
-       #print("got it")
+
+       # Wikidata dóna molts timeouts, hem de posar més controls
+       while True:
+           try:
+              self.item_dict = self.item.get()
+              break
+           except pywikibot.exceptions.MaxlagTimeoutError:
+              time.sleep(minuts*120)
+              minuts = minuts + 1
+              self.item_dict = self.item.get()
+
        return self.item
 
     def __str__(self):

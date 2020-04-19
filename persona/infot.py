@@ -41,7 +41,7 @@ class Xlate:
 	   'peu':			Instruccions([],'','',[],''),
 	   'alt':			Instruccions([],'','',[],''),
 	   'nom_original':		Instruccions([],'','',[],''),
-	   'nom_original_lleng':	Instruccions([],'','',[],''),
+	   'nom_original_lleng':	Instruccions(['llengua_nom_original'],'','',[],''),
 	   'nom_temple':		Instruccions([],'','',[],''),
 	   'nom_postum':		Instruccions([],'','',[],''),
 	   'nom_naixement':		Instruccions([],'','',[],''),
@@ -215,6 +215,7 @@ class Xlate:
 	   'mare':			Instruccions([],'','',[],''),
 	   'germans':			Instruccions([],'','',[],''),
 	   'parents':			Instruccions([],'','',[],''),
+	   'ordre':			Instruccions([],'','',[],''),
 	   'carrec':			Instruccions([],'','',[],''),
 	   'escut_carrec':		Instruccions([],'','',[],''),
 	   'inici':			Instruccions([],'','',[],''),
@@ -492,6 +493,11 @@ class Xlate:
 	   'nebtyhiero':		Instruccions([],'','',[],''),
 	   'golden':			Instruccions([],'','',[],''),
 	   'goldenhiero':		Instruccions([],'','',[],''),
+	   'extensio_parametres_esport':Instruccions([],'','',[],''),
+	   'extensio_carrera_esportiva':Instruccions([],'','',[],''),
+	   'extensio_carrecs_successoris':Instruccions([],'','',[],''),
+	   'extensio_participacio_esdeveniments':Instruccions([],'','',[],''),
+	   'extensio_guardons':         Instruccions([],'','',[],''),
 	   'item':			Instruccions([],'','',[],''),
 	  }
 
@@ -505,7 +511,8 @@ class Xlate:
      'imatge_espiritual',
      'peu_imatge_espiritual',
      'origen',
-     'principals_edificis'
+     'principals_edificis',
+     'millors_films'
   }
 
   def __init__(self):

@@ -61,7 +61,7 @@ def main():
       article = pag.title()
       break
     except pywikibot.NoPage:
-      exit(-1)
+      continue
     except pywikibot.data.api.APIError:
       time.sleep(min*60)
       min = min+1

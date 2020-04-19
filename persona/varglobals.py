@@ -30,6 +30,7 @@ def escapa_coses(primer):
     primer = primer.replace(" ","[_ ]")
     primer = primer.replace("+","\+")
     primer = primer.replace("*","\*")
+    primer = primer.replace("?","\?")
     return primer
 
 # compara dos strings i retorna True si són iguals, False si són diferents
@@ -51,15 +52,16 @@ def comp_fitx(primer,segon):
     primer = escapa_coses(primer)
     if alfabet:
       primer = inicireg+primer[1:]
+    #print("Anem al match amb \"%s\" i \"%s\"" % (primer, segon))
 
     return (re.match(primer,segon)!=None)
 
 def init():
   global fout
   global foutimatges
-  global foutrepassarimatges
+  #global foutrepassarimatges
   global nom_article
   fout = codecs.open('coses_a_revisar','a',encoding='utf-8')
   foutimatges = codecs.open('imatges_a_revisar','a',encoding='utf-8')
-  foutrepassarimatges = codecs.open('articles_amb_imatge','a',encoding='utf-8')
+  #foutrepassarimatges = codecs.open('articles_amb_imatge','a',encoding='utf-8')
   nom_article = ""

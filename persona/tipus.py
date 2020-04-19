@@ -101,7 +101,7 @@ def treure_markup(string):
 
     (str2, ljunk) = separar_refs(str2)
     if not detecta_barres(str2):
-        print(("Error en article " + varglobals.nom_article))
+        print(("****** ATENCIO: Error en article ***************" + varglobals.nom_article))
         return string
     regcometes = r"('{2,3})(.*?)\1"
     regclaudambbarra = r"\[\[[^]]+?\|([^]]+?)\]\]"
@@ -123,6 +123,25 @@ def treure_markup(string):
     str2 = re.sub(regnbsp, " ", str2)
     str2 = varglobals.treure_brs(str2)
     str2 = str2.strip()
+    # plantilla segle
+    regsegle = r"{{\s*[Ss]egle\s*\|([^\|]+)[^}]*}}"
+    (str2, nsubs) = re.subn(regsegle, r"segle \1", str2)
+    if nsubs > 0:
+        print(
+            "******************ATENCIO: Substitució de segle   **************************")
+
+    regsegle2 = r"{{\s*[Ss]\s*\|([^\|]+)[^}]*}}"
+    (str2, nsubs) = re.subn(regsegle2, r"segle \1", str2)
+    if nsubs > 0:
+        print(
+            "******************ATENCIO: Substitució de segle   **************************")
+
+    regsmalls = r"<small>(.*?)</small>"
+    (str2, nsubs) = re.subn(regsmalls, r"\1", str2)
+    if nsubs > 0:
+        print(
+            "******************ATENCIO: Substitució de smalls   **************************")
+
     # plantilla Taxon
     regtaxon = r"{{[Tt]àxon\s*\|([^|]*)\|([^|]*)\|([^}]*)}}"
     (str2, nsubs) = re.subn(regtaxon, r"\1. \3", str2)
@@ -133,10 +152,10 @@ def treure_markup(string):
     if re.search(reghtml, str2) is not None:
         print(
             "*************** ATENCIO: Entitats HTML a l'string  *************************")
-        print(("Error en article " + varglobals.nom_article))
+        print(("************ ATENCIO: Error en article **********" + varglobals.nom_article))
     if re.search(r"{{|}}", str2) is not None:
         print("*************** ATENCIO: Plantilla a l'string     *************************")
-        print(("Error en article " + varglobals.nom_article))
+        print(("************ ATENCIO: Error en article **********" + varglobals.nom_article))
     return str2
 
 
@@ -469,7 +488,7 @@ class Text_art:
                 ind = ind + mo.end()
                 self.plantilles.append(nou_elt)
         if len(self.plantilles) == 0:
-            print("**************** ULL - No hi ha plantilla ***************")
+            print("ULL - No hi ha plantilla ")
         return
         print("Trobades totes les plantilles")
         for i in self.plantilles:
@@ -680,10 +699,10 @@ class Plantilla:
         # tractament de la imatge i el peu
         if par_imatge != "" or par_peu != "":
             #print("********** IMATGE O PEU **********************")
-            # de moment no fem res, a espera de permís
-            #self.mirar_imatge(nom_article,wditem)
-            varglobals.foutrepassarimatges.write(nom_article)
-            varglobals.foutrepassarimatges.write("\n")
+            # ja tenim permís
+            self.mirar_imatge(nom_article,wditem)
+            #varglobals.foutrepassarimatges.write(nom_article)
+            #varglobals.foutrepassarimatges.write("\n")
 
         if par_web != "":
             #print("********** WEB **********************")
@@ -731,7 +750,7 @@ class Plantilla:
         fitxer = self.get_par("imatge")
         peu = self.get_par("peu")
 
-        print("som a mirar imatge")
+        #print("som a mirar imatge")
         if fitxer == "":
             return
         if not fitxer_es_imatge(fitxer):
@@ -944,7 +963,7 @@ class Plantilla:
         for x in self.llista_pars:
             if x.nom_param() != par:
                 nova.append(x)
-            else:                # Avisem si esborrem referència
+            else:                # Avisem si esborrem referència amb nom
                 lref = hiharef(x.valor_param())
                 if lref > 0:
                     if lref > 25:
