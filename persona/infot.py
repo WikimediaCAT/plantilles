@@ -190,7 +190,7 @@ class Xlate:
 	   'series':			Instruccions([],'','',[],''),
 	   'films':			Instruccions([],'','',[],''),
 	   'papers':			Instruccions([],'','',[],''),
-	   'obres_notables':		Instruccions([],'','',[],''),
+	   'obres_notables':		Instruccions(['principals_dissenys'],'','',[],''),
 	   'principals_projectes':	Instruccions([],'','',[],''),
 	   'imatgeobra':		Instruccions([],'','',[],''),
 	   'peuobra':			Instruccions([],'','',[],''),
@@ -498,6 +498,7 @@ class Xlate:
 	   'extensio_carrecs_successoris':Instruccions([],'','',[],''),
 	   'extensio_participacio_esdeveniments':Instruccions([],'','',[],''),
 	   'extensio_guardons':         Instruccions([],'','',[],''),
+	   'list_naixement':            Instruccions([],'','',[],''),
 	   'item':			Instruccions([],'','',[],''),
 	  }
 

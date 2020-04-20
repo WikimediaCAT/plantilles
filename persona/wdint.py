@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pywikibot
 import pprint
+import time
 
 import varglobals
 
