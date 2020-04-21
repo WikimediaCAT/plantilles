@@ -51,6 +51,7 @@ def main():
    # per treballar amb fitxer de proves, comentar a partir d'aquí
    pag = pywikibot.Page(siteca,article)
    min = 1
+   tornar_amunt = False
    while True:
     try:
       txtorig = pag.get()
@@ -61,12 +62,15 @@ def main():
       article = pag.title()
       break
     except pywikibot.NoPage:
-      continue
+      tornar_amunt = True
+      break
     except pywikibot.data.api.APIError:
       time.sleep(min*60)
       min = min+1
    # si no és de l'espai de noms normal no hi volem entrar
    if pag.namespace() != 0:
+      continue
+   if tornar_amunt:
       continue
    '''
    # per treballar amb fitxer de proves, comentar fins aquí
