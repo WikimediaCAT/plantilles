@@ -11,7 +11,10 @@ def sel_itemwd(pag):
    pag = pywikibot.Page(siteca,nom_article)
 
    itemwd = wd.wd_q_des_de_pag(pag)
-   return wd
+   if itemwd is not None:
+       return wd
+   else:
+       return None
 
 
 def treure_brs(string):

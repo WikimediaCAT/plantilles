@@ -157,9 +157,18 @@ class WDint:
        minuts = 1
        try:
            self.item = pywikibot.ItemPage.fromPage(pagina,self.wdsite)
-       except pywikibot.NoPage:
-           print(("Article ",article," sense wikidata"))
-           return
+       except pywikibot.exceptions.NoPage:
+           print("Article ",pagina.title()," sense wikidata")
+           return None
+       # la comprovació anterior sembla que no funciona
+       # si no existeix a Wikidata. Però si llavors intentes utilitzar
+       # self.item, peta. Per tant, ho provem
+       try:
+           if self.item == -1:
+               print("Això no ha de passar mai, perquè donarà excepció")
+       except pywikibot.exceptions.NoPage:
+           print("Article "+pagina.title()+" sense wikidata")
+           return None
 
        # Wikidata dóna molts timeouts, hem de posar més controls
        while True:

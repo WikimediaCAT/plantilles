@@ -180,7 +180,8 @@ def fitxer_es_imatge(nomfit):
 
     if extensio == "jpg" or extensio == "jpeg" or extensio == "gif" \
             or extensio == "png" or extensio == "tif" \
-            or extensio == "svg":
+            or extensio == "svg" or extensio == "tiff" \
+            or extensio == "djvu":
         return True
     return False
 
@@ -689,11 +690,13 @@ class Plantilla:
            par_item   != "" or par_signat != "" or par_web != "":
 
            wditem = varglobals.sel_itemwd(nom_article)
+           if wditem is None:
+               return
 
         # si hi ha paràmetre item i és el mateix de l'article, el podem treure
         if par_item != "":
             laq = wditem.get_id()
-            if laq == qart:
+            if laq == par_item:
                 self.elim_param("item")
 
         # tractament de la imatge i el peu
