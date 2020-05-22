@@ -10,7 +10,7 @@ import tipus
 import varglobals
 #import wdint
 
-from infot import Xlate
+from infot import Xlate, Xlate_esportista
 from tipus import Text_art, Plantilla, elimina_comment
 from pywikibot.version import getversion
 from pywikibot.login import LoginManager
@@ -79,7 +79,8 @@ def main():
    '''
 
    varglobals.nom_article=article
-   xl = Xlate()
+   #xl = Xlate()
+   xl = Xlate_esportista()
 
    txtnou = txtorig
 

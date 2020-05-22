@@ -508,7 +508,7 @@ class Text_art:
                 #print self.xl.nom_objectiu()
                 if self.xl.cal_esborrar_params(p.plantilla.titol):
                     p.plantilla.titol = self.xl.nom_objectiu()
-                    # p.plantilla.preproces()
+                    p.plantilla.preproces_esportista()
                     p.plantilla.traduit()
                     p.plantilla.tractar_wikidata(self.nom_article)
                     #p.plantila.mirar_peus_sense_imatge()
@@ -680,14 +680,20 @@ class Plantilla:
         par_peu    = self.get_par("peu")
         par_datnai = self.get_par("data_naixement")
         par_llocna = self.get_par("lloc_naixement")
+        par_ciuna  = self.get_par("ciutatdenaixement")
+        par_paisna = self.get_par("paisdenaixement")
         par_datdef = self.get_par("data_defuncio")
         par_llocde = self.get_par("lloc_defuncio")
+        par_ciumo  = self.get_par("ciutatdemort")
+        par_paismo = self.get_par("paisdemort")
         par_signat = self.get_par("signatura")
         par_web    = self.get_par("lloc_web")
 
         if par_imatge != "" or par_peu    != "" or par_datnai != "" or \
            par_llocna != "" or par_datdef != "" or par_llocde != "" or \
-           par_item   != "" or par_signat != "" or par_web != "":
+           par_item   != "" or par_signat != "" or par_web != "" or \
+           par_ciuna  != "" or par_paisna != "" or par_ciumo != "" or \
+           par_paismo != "":
 
            wditem = varglobals.sel_itemwd(nom_article)
            if wditem is None:
@@ -730,11 +736,13 @@ class Plantilla:
             if valor is not None:
                 self.elim_param("data_naixement")
 
-        if par_llocna != "":
+        if par_llocna != "" or par_ciuna != "" or par_paisna !="" :
             #print("********** LLOC DE NAIXEMENT **********************")
             valor = wditem.llegir_p_wd("P19")
             if valor is not None:
                 self.elim_param("lloc_naixement")
+                self.elim_param("ciutatdenaixement")
+                self.elim_param("paisdenaixement")
 
         if par_datdef != "":
             #print("********** DATA DE DEFUNCIO **********************")
@@ -742,11 +750,27 @@ class Plantilla:
             if valor is not None:
                 self.elim_param("data_defuncio")
 
-        if par_llocde != "":
+        if par_llocde != "" or par_ciumo != "" or par_paismo !="" :
             #print("********** LLOC DE DEFUNCIO **********************")
             valor = wditem.llegir_p_wd("P20")
             if valor is not None:
                 self.elim_param("lloc_defuncio")
+                self.elim_param("ciutatdemort")
+                self.elim_param("paisdemort")
+            else:
+                if par_llocde != "":
+                    lloc_def = par_llocde
+                    if par_ciumo != "":
+                        print("******** ATENCIO: lloc i ciutat de defunció ******")
+                    if par_paismo != "":
+                        print("******** ATENCIO: creant lloc_defunció 1******")
+                        lloc_def = lloc_def + ", " + par_paismo
+                else:
+                    print("******** ATENCIO: creant lloc_defunció 2******")
+                    lloc_def = par_ciumo + ", " + par_paismo
+                self.set_par("lloc_defuncio",lloc_def)
+                self.elim_param("ciutatdemort")
+                self.elim_param("paisdemort")
         return
 
     def mirar_imatge(self, nom_article, wd):
@@ -993,6 +1017,123 @@ class Plantilla:
             tipus = self.xl.tipus_associat(parametre.nom_param())
             print(("mirem p de", parametre.nom_param(), " és", p))
             resultat = wd.llegir_p_wd(p, tipus)
+
+    # donat un text del tipus "3 (4)<br>4 (5)<br>128 (31)"
+    # retorna dos textos, un que sigui "3<br>4<br>128
+    # i un altre que sigui "4<br>5<br>31"
+    def parsejar_partits_gols(self,text):
+        # primer normalitzarem els brs, perquè siguin tots iguals, i els
+        # passarem a <br>
+        textnorm = re.sub(r"<\s*[bB][rR]\s*\/?\s*>","<br>",text)
+        # també traurem les plantilles {{0}} que eren per alinear els números
+        textnorm = re.sub(r"{{\s*0\s*}}","",textnorm)
+
+        # ara ho partim amb <br> i obtenim una llista, on cada element és
+        # del tipus "3 (4)"
+        numeros = textnorm.split("<br>")
+        partits=""
+        gols=""
+        # ara crearem les dues tirallongues de partits i gols en paral·lel
+        for elt in numeros:
+            mo = re.match(r"\s*([0-9]+)\s*\(\s*\+?([0-9]+)\s*\)",elt)
+            if mo is None:
+                # si no fa el match, o no hi ha res, o està mal escrit, fem
+                # com si no hi hagués res
+                strpartit = ""
+                strgols   = ""
+            else:
+                # aquí tenim partits a mo.group(1) i gols a mo.group(2)
+                strpartit = mo.group(1)
+                strgols   = mo.group(2)
+            # construim el que hem de retornar
+            partits = partits + strpartit + "<br>"
+            gols    = gols    + strgols   + "<br>"
+        # per acabar, traiem els <br> que hagin pogut quedar al final
+        partits = re.sub(r"(?:<br>)*$","",partits)
+        gols    = re.sub(r"(?:<br>)*$","",gols)
+        print("Retornem partits ", partits, "gols ", gols)
+        return (partits,gols)
+
+    def preproces_esportista(self):
+        # params_a_mirar és una llista de llistes. Les llistes petites
+        # corresponen a sinònims, i s'han de traduir al primer de la llista
+        # la llista gran és tots els paràmetres qeu s'han d'agrupar en un
+        params_a_mirar = [['clubsjuvenils','youthclubs'],['anysjuvenils','youthyears'],['clubs','teams','Equips anteriors'],['anys','years'],['gols','goals'],['equipnacional','seleccio_nacional','nationalteam'],['anysnacional','nationalyears'],['golsnacional','nationalgoals'],['clubsentrenador','clubsentrenats','managerclubs'],['anysentrenador','anysentrenant','manageryears'],['partits','caps'],['partitsnacional','nationalcaps']]
+        params_dobles = ['partits(gols)','partitsnacional(gols)']
+
+        for llistes in params_a_mirar:
+            #print("Mirem ",llistes)
+            for param in llistes:
+                # primer mirem el paràmetre sense números
+                # si aquest té contingut ja no entrarem al segon bucle
+                # no fem la traducció, però, això es farà a self.traduit()
+                contingut = self.get_par(param)
+                if len(contingut) > 0:
+                        break
+                nom_a_omplir = llistes[0]
+                contingut_param = ""
+                primer = True
+                alguncontingut = False
+                for i in range(1,31):
+                    contingut = self.get_par(param+str(i))
+
+                    if primer:
+                       contingut_param=contingut
+                       primer = False
+                    else:
+                       contingut_param=contingut_param+'<br>'+contingut
+                    if len(contingut) > 0:
+                        alguncontingut = True
+
+                    # ja n'hem llegit el contingut, el podem eliminar
+                    self.elim_param(param+str(i))
+                if alguncontingut:
+                    contingut_param = re.sub(r"(?:<br>)*$","",contingut_param)
+                else:
+                    contingut_param = ""
+                #print("Contingut "+contingut_param)
+                # Si hem aconseguit omplir alguna cosa, ja podem sortir
+                # no cal mirar els altres sinònims
+                if contingut_param != "":
+                   self.set_par(nom_a_omplir,contingut_param)
+                   break
+
+        #
+        #Ara fem els paràmetres del tipus partits(gols) o partitsnacional(gols)
+        #
+        for param in params_dobles:
+            # si ja hi ha alguna cosa a partits o gols, ignorem aquests
+            if param == 'partitsnacional(gols)' and \
+                    (self.get_par("partitsnacional")!="" or self.get_par("golsnacional")!=""):
+                continue
+            if param == 'partits(gols)' and \
+                    (self.get_par("partits")!="" or self.get_par("gols")!=""):
+                continue
+            # ara fem el tractament pròpiament dit
+            # primer, si és només un paràmetre que els inclou tots amb <br>
+            contingut = self.get_par(param)
+            if len(contingut) > 0:
+                print("********* ATENCIO: Paràmetre doble **********")
+                (partits, gols) = self.parsejar_partits_gols(contingut)
+                # creem els paràmetres separats
+                if "nacional" in param:
+                    self.set_par("partitsnacional",partits)
+                    self.set_par("golsnacional",gols)
+                else:
+                    self.set_par("partits",partits)
+                    self.set_par("gols",gols)
+                # esborrem el paràmetre que acabem de llegir
+                self.elim_param(param)
+                # ja no comprovem els partits(gols)1....
+                continue
+
+            for i in range(1,31):
+                contingut = self.get_par(param+str(i))
+                if len(contingut) > 0:
+                    print("********* ATENCIO: Paràmetre doble amb numero **********")
+        monuments = self.get_par("monuments")
+        if len(monuments) > 0:
+            print("********* ATENCIO: esportista amb monument ***********")
 
     def traduit(self):
         llista_nova = []

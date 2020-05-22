@@ -34,33 +34,33 @@ class Xlate:
 	}
 
   params = {    # a l'esquerra, el nom resultat, a la dreta, la llista de paràmetres que se substituiran pel de l'esquerra
-	   'nom':			Instruccions(['Name','name'],'','',[],""),
+	   'nom':			Instruccions(['Name','name','nomdeljugador','playername','Nom'],'','',[],""),
 	   'prefix_honorific':		Instruccions([],'','',[],''),
 	   'sufix_honorific':		Instruccions([],'','',[],''),
-	   'imatge':			Instruccions([],'','',[],''),
-	   'peu':			Instruccions([],'','',[],''),
+	   'imatge':			Instruccions(['image','Imatge','Img'],'','',[],''),
+	   'peu':			Instruccions(['peu_d\'imatge','caption','image_caption','llegenda','nom imatge'],'','',[],''),
 	   'alt':			Instruccions([],'','',[],''),
 	   'nom_original':		Instruccions([],'','',[],''),
 	   'nom_original_lleng':	Instruccions(['llengua_nom_original'],'','',[],''),
 	   'nom_temple':		Instruccions([],'','',[],''),
 	   'nom_postum':		Instruccions([],'','',[],''),
-	   'nom_naixement':		Instruccions([],'','',[],''),
+	   'nom_naixement':		Instruccions(['fullname','nomreal','nomcomplet','Nom complet'],'','',[],''),
 	   'lloc_naixement':		Instruccions([],'','',[],''),
-	   'data_naixement':		Instruccions(['birth'],'','',[],''),
+	   'data_naixement':		Instruccions(['birth','datadenaixement','dateofbirth','birth_date','data_naixença','Data de naixement','data_naix','naixement_data','data naixement'],'','',[],''),
 	   'bateig':			Instruccions([],'','',[],''),
 	   'floruit':			Instruccions([],'','',[],''),
 	   'lloc_defuncio':		Instruccions([],'','',[],''),
-	   'data_defuncio':		Instruccions([],'','',[],''),
-	   'causa_defuncio':		Instruccions(['causa_mort'],'','',[],''),
+	   'data_defuncio':		Instruccions(['datademort','dateofdeath','deathdate','death_date','data_defunció','Data de defunció','data_mort','mort_data'],'','',[],''),
+	   'causa_defuncio':		Instruccions(['causa_mort','mort_motiu'],'','',[],''),
 	   'descobriment_cos':		Instruccions([],'','',[],''),
 	   'data_desaparicio':		Instruccions([],'','',[],''),
 	   'sepultura':			Instruccions([],'','',[],''),
 	   'coordenades_sepultura':	Instruccions([],'','',[],''),
-	   'residencia':		Instruccions([],'','',[],''),
-	   'nacionalitat':		Instruccions([],'','',[],''),
+	   'residencia':		Instruccions(['residència','resident'],'','',[],''),
+	   'nacionalitat':		Instruccions(['nationality','país','País','pais'],'','',[],''),
 	   'ciutadania':		Instruccions([],'','',[],''),
 	   'altres noms':		Instruccions([],'','',[],''),
-	   'alies':			Instruccions([],'','',[],''),
+	   'alies':			Instruccions(['sobrenom','nickname','Sobrenom'],'','',[],''),
 	   'nom_ploma':			Instruccions([],'','',[],''),
 	   'etnia':			Instruccions([],'','',[],''),
 	   'ideologia':			Instruccions([],'','',[],''),
@@ -72,20 +72,20 @@ class Xlate:
 	   'tesi_any':			Instruccions([],'','',[],''),
 	   'tematica':			Instruccions([],'','',[],''),
 	   'direccio_tesi':		Instruccions([],'','',[],''),
-	   'conegut_per':		Instruccions([],'','',[],''),
-	   'alçada':			Instruccions([],'','',[],''),
-	   'pes':			Instruccions([],'','',[],''),
-	   'lateralitat':		Instruccions([],'','',[],''),
+	   'conegut_per':		Instruccions(['records'],'','',[],''),
+	   'alçada':			Instruccions(['height','Alçada'],'','',[],''),
+	   'pes':			Instruccions(['weight','Pes'],'','',[],''),
+	   'lateralitat':		Instruccions(['braç','dretà-esquerrà'],'','',[],''),
 	   'ulls':			Instruccions([],'','',[],''),
 	   'cabells':			Instruccions([],'','',[],''),
 	   'camp_treball':		Instruccions([],'','',[],''),
 	   'etiqueta_camp_treball':	Instruccions([],'','',[],''),
-	   'ocupacio':			Instruccions([],'','',[],''),
+	   'ocupacio':			Instruccions(['actual'],'','',[],''),
 	   'etiqueta_ocupacio':		Instruccions([],'','',[],''),
 	   'epoca':			Instruccions([],'','',[],''),
 	   'etiqueta_epoca':		Instruccions([],'','',[],''),
 	   'periode_actiu':		Instruccions([],'','',[],''),
-	   'organitzacio':		Instruccions([],'','',[],''),
+	   'organitzacio':		Instruccions(['negocis'],'','',[],''),
 	   'ocupador':		        Instruccions([],'','',[],''),
 	   'mitjans':		        Instruccions([],'','',[],''),
 	   'etiqueta_organitzacio':	Instruccions([],'','',[],''),
@@ -107,7 +107,7 @@ class Xlate:
 	   'agent':			Instruccions([],'','',[],''),
 	   'editor':			Instruccions([],'','',[],''),
 	   'salari':			Instruccions([],'','',[],''),
-	   'patrimoni_personal':	Instruccions(['valor_net'],'','',[],''),
+	   'patrimoni_personal':	Instruccions(['valor_net','diners','diners guanyats'],'','',[],''),
 	   'lleialtat':			Instruccions([],'','',[],''),
 	   'periode_actiu_militar':	Instruccions([],'','',[],''),
 	   'arma':			Instruccions([],'','',[],''),
@@ -152,20 +152,21 @@ class Xlate:
 	   'membres_anteriors':		Instruccions([],'','',[],''),
 	   'patrons':			Instruccions([],'','',[],''),
 	   'esport':			Instruccions([],'','',[],''),
-	   'disciplina':		Instruccions([],'','',[],''),
+	   'disciplina':		Instruccions(['estils','modalitat'],'','',[],''),
 	   'especialitat':		Instruccions([],'','',[],''),
-	   'posicio_equip':		Instruccions([],'','',[],''),
+	   'posicio_equip':		Instruccions(['posició','position','Tipus'],'','',[],''),
 	   'ma_joc':			Instruccions([],'','',[],''),
-	   'lliga':			Instruccions([],'','',[],''),
-	   'dorsal_club':		Instruccions([],'','',[],''),
-	   'draft':			Instruccions([],'','',[],''),
-	   'draft_equip':		Instruccions([],'','',[],''),
-	   'draft_any':			Instruccions([],'','',[],''),
-	   'patrocinador':		Instruccions([],'','',[],''),
-	   'lloc_debut':		Instruccions([],'','',[],''),
-	   'data_debut':		Instruccions([],'','',[],''),
+	   'lliga':			Instruccions(['league','lliga'],'','',[],''),
+	   'club_actual':		Instruccions(['clubactual','currentclub','team','Equip actual','club'],'','',[],''),
+	   'dorsal_club':		Instruccions(['numeroclub','clubnumber','number','dorsal_club','moto'],'','',[],''),
+	   'draft':			Instruccions(['draft_pick'],'','',[],''),
+	   'draft_equip':		Instruccions(['draft_team','universitat'],'','',[],''),
+	   'draft_any':			Instruccions(['draft_year'],'','',[],''),
+	   'patrocinador':		Instruccions(['marques','oficial'],'','',[],''),
+	   'lloc_debut':		Instruccions(['cursa_1a','debuttrinquet','debutfrontó'],'','',[],''),
+	   'data_debut':		Instruccions(['datadebut'],'','',[],''),
 	   'lloc_retirada':		Instruccions([],'','',[],''),
-	   'data_retirada':		Instruccions([],'','',[],''),
+	   'data_retirada':		Instruccions(['retirada','dataretirada'],'','',[],''),
 	   'entrenador':		Instruccions([],'','',[],''),
 	   'equips':	        	Instruccions([],'','',[],''),
 	   'participa':			Instruccions([],'','',[],''),
@@ -190,7 +191,7 @@ class Xlate:
 	   'series':			Instruccions([],'','',[],''),
 	   'films':			Instruccions([],'','',[],''),
 	   'papers':			Instruccions([],'','',[],''),
-	   'obres_notables':		Instruccions(['principals_dissenys'],'','',[],''),
+	   'obres_notables':		Instruccions(['principals_dissenys','models_creats'],'','',[],''),
 	   'principals_projectes':	Instruccions([],'','',[],''),
 	   'imatgeobra':		Instruccions([],'','',[],''),
 	   'peuobra':			Instruccions([],'','',[],''),
@@ -286,7 +287,7 @@ class Xlate:
 	   'registre_veu':		Instruccions([],'','',[],''),
 	   'peu_veu':		        Instruccions([],'','',[],''),
 	   'lloc_web':			Instruccions(['website','lloc web','pàgina web','web'],'','',[],''),
-	   'dades_medaller':		Instruccions([],'','',[],''),
+	   'dades_medaller':		Instruccions(['medalles','medaltemplates'],'','',[],''),
 	   'altres_ocupacions':		Instruccions([],'','',[],''),
 	   'designat':		        Instruccions([],'','',[],''),
 	   'designat2':		        Instruccions([],'','',[],''),
@@ -471,6 +472,12 @@ class Xlate:
      'k_nom8',
      'l_etiqueta8',
      'l_nom8',
+     'ntupdate',
+     'equipnacional-update',
+     'club-update',
+     'pcupdate',
+     'totalcaps',
+     'totalgoals'
   }
 
   def __init__(self):
@@ -537,5 +544,30 @@ class Xlate:
     except:
        return text
         
-
 #print params['poblacio'].comment
+
+class Xlate_esportista(Xlate):
+    def __init__(self):
+        self.params['clubsjuvenils'] = Instruccions(['youthclubs'],'','',[],'')
+        self.params['anysjuvenils'] = Instruccions(['youthyears'],'','',[],'')
+        self.params['clubs'] = Instruccions(['teams','Equips anteriors'],'','',[],'')
+        self.params['anys'] = Instruccions(['years'],'','',[],'')
+        self.params['partits'] = Instruccions(['caps'],'','',[],'')
+        self.params['gols'] = Instruccions(['goals'],'','',[],'')
+        self.params['equipnacional'] = Instruccions(['seleccio_nacional','nationalteam'],'','',[],'')
+        self.params['anysnacional'] = Instruccions(['nationalyears'],'','',[],'')
+        self.params['partitsnacional'] = Instruccions(['nationalcaps'],'','',[],'')
+        self.params['golsnacional'] = Instruccions(['nationalgoals'],'','',[],'')
+        self.params['clubsentrenats'] = Instruccions(['clubsentrenador','managerclubs'],'','',[],'')
+        self.params['anysentrenador'] = Instruccions(['anysentrenats','manageryears'],'','',[],'')
+        # aquests paràmetres s'esborraran igualment
+        self.params['ciutatdenaixement'] = Instruccions(['cityofbirth'],'','',[],'')
+        self.params['paisdenaixement'] = Instruccions(['paísdenaixement','countryofbirth'],'','',[],'')
+        self.params['ciutatdemort'] = Instruccions(['cityofdeath'],'','',[],'')
+        self.params['paisdemort'] = Instruccions(['paísdemort','countryofdeath'],'','',[],'')
+        # fi de paràmetres, ara inicialitzem la resta
+        Xlate.__init__(self)
+        # aquests s'han de fer després, per matxacar el que ha fet
+        # l'altre init
+        self.plant['Infotaula esportista'] = [('S','','')]
+        self.nom_final = "Infotaula esportista"
