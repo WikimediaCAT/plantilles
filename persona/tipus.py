@@ -123,6 +123,13 @@ def treure_markup(string):
     str2 = re.sub(regnbsp, " ", str2)
     str2 = varglobals.treure_brs(str2)
     str2 = str2.strip()
+    # plantilla Sel de selecció
+    regsegle = r"{{\s*[Ss]el\s*\|([^\|]+)[^}]*}}"
+    (str2, nsubs) = re.subn(regsegle, r"\1", str2)
+    if nsubs > 0:
+        print(
+            "******************ATENCIO: Substitució de selecció   **************************")
+
     # plantilla segle
     regsegle = r"{{\s*[Ss]egle\s*\|([^\|]+)[^}]*}}"
     (str2, nsubs) = re.subn(regsegle, r"segle \1", str2)
@@ -761,7 +768,7 @@ class Plantilla:
                 if par_llocde != "":
                     lloc_def = par_llocde
                     if par_ciumo != "":
-                        print("******** ATENCIO: lloc i ciutat de defunció ******")
+                        print("******** ATENCIO: lloc i ciutat de defunció NO PREVIST ******")
                     if par_paismo != "":
                         print("******** ATENCIO: creant lloc_defunció 1******")
                         lloc_def = lloc_def + ", " + par_paismo
@@ -934,15 +941,32 @@ class Plantilla:
 
     def pintar(self):
 
-        toret = "{{" + self.titol
         params_trobats = {}         # diccionari per detectar repeticions
         hihapars = False            # si hi ha algun paràmetre passarà a True
         maxlen = 0                  # per alinear els paràmetres
         # mirem quin és el paràmetre més llarg
+        # i mirem si hi ha algun parametre esportiu
+        canvi_a_persona = True
         for parametre in self.llista_pars:
+            # Afegit per tractar esportistes
+            if canvi_a_persona and (parametre.nom_param() == "clubsjuvenils" or parametre.nom_param() == "clubs" \
+                    or parametre.nom_param() == "equipnacional" or parametre.nom_param() == "clubsentrenats"):
+                    canvi_a_persona = False
+            # Fi de l'afegit per tractar esportistes
             act = len(parametre.nom_param())
             if (act > maxlen):
                 maxlen = act
+
+        # Afegit per tractar esportistes
+        # si no hem trobat cap paràmetre d'esportista, passem a persona
+        if canvi_a_persona:
+            print("************** ATENCIO Canvi a Infotaula persona  ********************")
+            toret = "{{" + "Infotaula persona"
+        else:
+            # Això serà infotaula esportista
+            toret = "{{" + self.titol
+        # Fi de l'afegit per tractar esportistes
+        # seria: toret = "{{" + self.titol
 
         # ara sí que pintem, recorrent tots els parametres que han quedat
         for parametre in self.llista_pars:
@@ -1127,10 +1151,34 @@ class Plantilla:
                 # ja no comprovem els partits(gols)1....
                 continue
 
+            # Aquí no hi arribem si existia partits(gols) sense número
+            partitstotal = ""
+            golstotal    = ""
             for i in range(1,31):
+                # parsegem el paràmetre i l'afegim a l'string total
                 contingut = self.get_par(param+str(i))
                 if len(contingut) > 0:
                     print("********* ATENCIO: Paràmetre doble amb numero **********")
+                    (partits, gols) = self.parsejar_partits_gols(contingut)
+                else:
+                    (partits, gols) = ("", "")
+                self.elim_param(param+str(i))
+                partitstotal = partitstotal + partits + '<br>'
+                golstotal    = golstotal    + gols    + '<br>'
+            #
+            # Ara traiem els <br> que hagin quedat al final
+            #
+            partitstotal = re.sub(r"(?:<br>)*$","",partitstotal)
+            golstotal    = re.sub(r"(?:<br>)*$","",golstotal)
+            # Ara creem els paràmetres separats
+            if len(partitstotal) > 0:
+                if "nacional" in param:
+                    self.set_par("partitsnacional",partitstotal)
+                    self.set_par("golsnacional",golstotal)
+                else:
+                    self.set_par("partits",partitstotal)
+                    self.set_par("gols",golstotal)
+        #
         monuments = self.get_par("monuments")
         if len(monuments) > 0:
             print("********* ATENCIO: esportista amb monument ***********")
