@@ -45,7 +45,7 @@ class Xlate:
 	   'nom_temple':		Instruccions([],'','',[],''),
 	   'nom_postum':		Instruccions([],'','',[],''),
 	   'nom_naixement':		Instruccions(['fullname','nomreal','nomcomplet','Nom complet'],'','',[],''),
-	   'lloc_naixement':		Instruccions([],'','',[],''),
+	   'lloc_naixement':		Instruccions(['birth_place'],'','',[],''),
 	   'data_naixement':		Instruccions(['birth','datadenaixement','dateofbirth','birth_date','data_naixença','Data de naixement','data_naix','naixement_data','data naixement'],'','',[],''),
 	   'bateig':			Instruccions([],'','',[],''),
 	   'floruit':			Instruccions([],'','',[],''),
@@ -554,11 +554,11 @@ class Xlate_esportista(Xlate):
         self.params['anys'] = Instruccions(['years'],'','',[],'')
         self.params['partits'] = Instruccions(['caps'],'','',[],'')
         self.params['gols'] = Instruccions(['goals'],'','',[],'')
-        self.params['equipnacional'] = Instruccions(['seleccio_nacional','nationalteam'],'','',[],'')
+        self.params['equipnacional'] = Instruccions(['seleccio_nacional','nationalteam','selecciónacional'],'','',[],'')
         self.params['anysnacional'] = Instruccions(['nationalyears'],'','',[],'')
         self.params['partitsnacional'] = Instruccions(['nationalcaps'],'','',[],'')
         self.params['golsnacional'] = Instruccions(['nationalgoals'],'','',[],'')
-        self.params['clubsentrenats'] = Instruccions(['clubsentrenador','managerclubs'],'','',[],'')
+        self.params['clubsentrenats'] = Instruccions(['clubsentrenador','managerclubs','equipsentrenats'],'','',[],'')
         self.params['anysentrenador'] = Instruccions(['anysentrenats','manageryears'],'','',[],'')
         # aquests paràmetres s'esborraran igualment
         self.params['ciutatdenaixement'] = Instruccions(['cityofbirth'],'','',[],'')
